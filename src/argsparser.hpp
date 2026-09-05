@@ -1,22 +1,20 @@
 /* ======================================================================================
  * Library       : vhlibargs
  * Description   : A C++ command-line parser library
- * Revision      : 0.1.0-rc1
+ * Revision      : 0.1.0-rc2
  * Source        : https://github.com/vigatron/vhlibargs
  * Disclaimer    : Provided "AS IS", without warranty.
  * License       : MIT
  * File          : src/argsparser.hpp
- * Content size  : 14569
- * Date / Time   : 05-09-2026 19:27:40
- * MD5           : ce2b56b3a66458823a953db5b325e131
+ * Content size  : 14847
+ * Date / Time   : 06-09-2026 01:45:55
+ * MD5           : 4e59031359b24e4d8070a398fe527dbe
  * Notes         : MD5 = file content without header/footer
  * Encoding      : UTF-8
  * Author        : Viktor Glebov / V01G04A81
  * Copyright     : © 2026 Viktor Glebov
  * ========================[ BEGIN FILE CONTENT ]====================================== */
 #pragma once
-
-#include "vhplatform.hpp"
 
 #include "incs/argbase.hpp"
 #include "incs/argstr.hpp"
@@ -27,6 +25,13 @@
 
 namespace VHArgsParser
 {
+
+#ifndef VHPLATFORM_INCLUDED
+#define verr uint32_t
+#define verror(X) (X)
+#define vok verror(0)
+    verr verrmsg(int x, const std::string &errmsg);
+#endif
 
     /**
      * Header only implementation
@@ -141,7 +146,7 @@ namespace VHArgsParser
             if (!kobj.isCommand())
                 return strEmptyString;
 
-            return kobj.strval;
+            return kobj.keyname;
         }
 
         /**
@@ -167,7 +172,8 @@ namespace VHArgsParser
          * @param keyname Name of the key to find.
          * @return True if the key is an option and is set to true, false otherwise.
          */
-        bool GetOpt(const std::string &keyname) const {
+        bool GetOpt(const std::string &keyname) const
+        {
 
             int idx = InternalFindKeyIdx(keyname);
             if (idx == -1)
@@ -275,7 +281,7 @@ namespace VHArgsParser
             for (int i = 0; i < keyslist.size(); i++)
             {
                 std::cout
-                    << "\t-" + keyslist[i].keyname
+                    << "\t" + keyslist[i].keyname
                     << "\t" << keyslist[i].keydesc
                     << std::endl;
             }
@@ -350,20 +356,20 @@ namespace VHArgsParser
             return true;
         }
 
-        /**
-         * @brief Finds the index of a key that is a command.
-         * @return Index of the key that is a command, if a command is found,
-         *         and -1 otherwise.
-         */
-        int __FindIndexWithCmdFlag()
-        {
-            for (int i = 0; i < arrkeys.size(); i++)
-            {
-                if (arrkeys[i].isCommand())
-                    return i;
-            }
-            return -1;
-        }
+        // /**
+        //  * @brief Finds the index of a key that is a command.
+        //  * @return Index of the key that is a command, if a command is found,
+        //  *         and -1 otherwise.
+        //  */
+        // int __FindIndexWithCmdFlag()
+        // {
+        //     for (int i = 0; i < arrkeys.size(); i++)
+        //     {
+        //         if (arrkeys[i].isCommand())
+        //             return i;
+        //     }
+        //     return -1;
+        // }
 
         /**
          * @brief Parses a prefixed parameter.
@@ -402,6 +408,10 @@ namespace VHArgsParser
 
                 // Mark executable command
                 arg.strval = "1";
+            }
+            else if (arg.isArgTypeOpt())
+            {
+                arg.intval = 1;
             }
 
             return vok;
@@ -503,9 +513,9 @@ namespace VHArgsParser
 /* ========================[  END FILE CONTENT  ]========================
  * Library          : vhlibargs
  * File             : src/argsparser.hpp
- * Revision         : 0.1.0-rc1
- * Content size     : 14569
- * Date / Time      : 05-09-2026 19:27:40
- * MD5              : ce2b56b3a66458823a953db5b325e131
+ * Revision         : 0.1.0-rc2
+ * Content size     : 14847
+ * Date / Time      : 06-09-2026 01:45:55
+ * MD5              : 4e59031359b24e4d8070a398fe527dbe
  * Copyright        : © 2026 Viktor Glebov
  * ====================================================================== */
