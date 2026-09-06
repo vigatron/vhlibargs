@@ -1,14 +1,14 @@
 /* ======================================================================================
  * Library       : vhlibargs
  * Description   : A C++ command-line parser library
- * Revision      : 0.1.0-rc2
+ * Revision      : 0.1.0-rc3
  * Source        : https://github.com/vigatron/vhlibargs
  * Disclaimer    : Provided "AS IS", without warranty.
  * License       : MIT
  * File          : src/argsparser.hpp
- * Content size  : 14847
- * Date / Time   : 06-09-2026 01:45:55
- * MD5           : 4e59031359b24e4d8070a398fe527dbe
+ * Content size  : 14838
+ * Date / Time   : 06-09-2026 16:07:24
+ * MD5           : 98ccae5def94a66a7283ded9f25600bb
  * Notes         : MD5 = file content without header/footer
  * Encoding      : UTF-8
  * Author        : Viktor Glebov / V01G04A81
@@ -109,7 +109,7 @@ namespace VHArgsParser
                 return strEmptyString;
 
             const VHArgTypeBase &kobj = GetKeyByIndex(idx);
-            if (!kobj.isArgTypeText())
+            if (!kobj.isTypeFileName())
                 return strEmptyString;
 
             return kobj.strval;
@@ -126,7 +126,7 @@ namespace VHArgsParser
                 return strEmptyString;
 
             const VHArgTypeBase &kobj = GetKeyByIndex(idx);
-            if (!kobj.isArgTypeText())
+            if (!kobj.isTypeString())
                 return strEmptyString;
 
             return kobj.strval;
@@ -161,7 +161,7 @@ namespace VHArgsParser
                 return 0;
 
             const VHArgTypeBase &kobj = GetKeyByIndex(idx);
-            if (!kobj.isArgTypeInt())
+            if (!kobj.isTypeInt())
                 return 0;
 
             return kobj.intval;
@@ -180,7 +180,7 @@ namespace VHArgsParser
                 return false;
 
             const VHArgTypeBase &kobj = GetKeyByIndex(idx);
-            if (!kobj.isArgTypeOpt())
+            if (!kobj.isTypeOpt())
                 return 0;
 
             return kobj.intval;
@@ -409,7 +409,7 @@ namespace VHArgsParser
                 // Mark executable command
                 arg.strval = "1";
             }
-            else if (arg.isArgTypeOpt())
+            else if (arg.isTypeOpt())
             {
                 arg.intval = 1;
             }
@@ -513,9 +513,9 @@ namespace VHArgsParser
 /* ========================[  END FILE CONTENT  ]========================
  * Library          : vhlibargs
  * File             : src/argsparser.hpp
- * Revision         : 0.1.0-rc2
- * Content size     : 14847
- * Date / Time      : 06-09-2026 01:45:55
- * MD5              : 4e59031359b24e4d8070a398fe527dbe
+ * Revision         : 0.1.0-rc3
+ * Content size     : 14838
+ * Date / Time      : 06-09-2026 16:07:24
+ * MD5              : 98ccae5def94a66a7283ded9f25600bb
  * Copyright        : © 2026 Viktor Glebov
  * ====================================================================== */
