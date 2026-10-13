@@ -1,14 +1,14 @@
 /* ======================================================================================
  * Library       : vhlibargs
  * Description   : A C++ command-line parser library
- * Revision      : 0.1.0-rc3
+ * Revision      : 0.1.0
  * Source        : https://github.com/vigatron/vhlibargs
  * Disclaimer    : Provided "AS IS", without warranty.
  * License       : MIT
  * File          : src/incs/argopt.hpp
- * Content size  : 500
- * Date / Time   : 06-09-2026 16:07:24
- * MD5           : a12ab1b15b1e6663e06c7ac4392029e8
+ * Content size  : 458
+ * Date / Time   : 13-10-2026 17:34:18
+ * MD5           : ad74b022c82b522998f0329cd5297a22
  * Notes         : MD5 = file content without header/footer
  * Encoding      : UTF-8
  * Author        : Viktor Glebov / V01G04A81
@@ -17,32 +17,28 @@
 #pragma once
 #include "argbase.hpp"
 
-namespace VHArgsParser
-{
+namespace VHArgsParser {
 
-    /**
-     * Single Option param without followed extended arg
-     */
-    class VHArgTypeOption : public VHArgTypeBase
-    {
-    public:
-        VHArgTypeOption(const std::string &keyval, const std::string &desc, bool def)
-            : VHArgTypeBase(keyval, desc, false)
-        {
-            typearg = eOptType::eOptTypeOption;
-            intdef = def ? 1 : 0;
-            if(def)
-                defval = "1";
-        }
-    };
-
+/**
+ * Single Option param without followed extended arg
+ */
+class VHArgTypeOption : public VHArgTypeBase {
+  public:
+    VHArgTypeOption(const std::string &keyval, const std::string &desc, bool def)
+        : VHArgTypeBase(keyval, desc, false) {
+        typearg = eOptType::eOptTypeOption;
+        intdef = def ? 1 : 0;
+        defval = def ? "1" : "";
+    }
 };
+};    // namespace VHArgsParser
+
 /* ========================[  END FILE CONTENT  ]========================
  * Library          : vhlibargs
  * File             : src/incs/argopt.hpp
- * Revision         : 0.1.0-rc3
- * Content size     : 500
- * Date / Time      : 06-09-2026 16:07:24
- * MD5              : a12ab1b15b1e6663e06c7ac4392029e8
+ * Revision         : 0.1.0
+ * Content size     : 458
+ * Date / Time      : 13-10-2026 17:34:18
+ * MD5              : ad74b022c82b522998f0329cd5297a22
  * Copyright        : © 2026 Viktor Glebov
  * ====================================================================== */
