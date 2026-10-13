@@ -16,8 +16,6 @@
  * ========================[ BEGIN FILE CONTENT ]====================================== */
 #pragma once
 
-#include "vhplatform.hpp"
-
 #include "incs/argbase.hpp"
 #include "incs/argstr.hpp"
 #include "incs/argfile.hpp"
@@ -27,6 +25,13 @@
 
 namespace VHArgsParser
 {
+
+#ifndef VHPLATFORM_INCLUDED
+#define verr uint32_t
+#define verror(X) (X)
+#define vok verror(0)
+    verr verrmsg(int x, const std::string &errmsg);
+#endif
 
     /**
      * Header only implementation
@@ -104,7 +109,7 @@ namespace VHArgsParser
                 return strEmptyString;
 
             const VHArgTypeBase &kobj = GetKeyByIndex(idx);
-            if (!kobj.isArgTypeText())
+            if (!kobj.isTypeFileName())
                 return strEmptyString;
 
             return kobj.strval;
@@ -121,7 +126,7 @@ namespace VHArgsParser
                 return strEmptyString;
 
             const VHArgTypeBase &kobj = GetKeyByIndex(idx);
-            if (!kobj.isArgTypeText())
+            if (!kobj.isTypeString())
                 return strEmptyString;
 
             return kobj.strval;
@@ -141,7 +146,7 @@ namespace VHArgsParser
             if (!kobj.isCommand())
                 return strEmptyString;
 
-            return kobj.strval;
+            return kobj.keyname;
         }
 
         /**
@@ -156,7 +161,7 @@ namespace VHArgsParser
                 return 0;
 
             const VHArgTypeBase &kobj = GetKeyByIndex(idx);
-            if (!kobj.isArgTypeInt())
+            if (!kobj.isTypeInt())
                 return 0;
 
             return kobj.intval;
@@ -167,14 +172,15 @@ namespace VHArgsParser
          * @param keyname Name of the key to find.
          * @return True if the key is an option and is set to true, false otherwise.
          */
-        bool GetOpt(const std::string &keyname) const {
+        bool GetOpt(const std::string &keyname) const
+        {
 
             int idx = InternalFindKeyIdx(keyname);
             if (idx == -1)
                 return false;
 
             const VHArgTypeBase &kobj = GetKeyByIndex(idx);
-            if (!kobj.isArgTypeOpt())
+            if (!kobj.isTypeOpt())
                 return 0;
 
             return kobj.intval;
@@ -275,7 +281,7 @@ namespace VHArgsParser
             for (int i = 0; i < keyslist.size(); i++)
             {
                 std::cout
-                    << "\t-" + keyslist[i].keyname
+                    << "\t" + keyslist[i].keyname
                     << "\t" << keyslist[i].keydesc
                     << std::endl;
             }
@@ -350,20 +356,20 @@ namespace VHArgsParser
             return true;
         }
 
-        /**
-         * @brief Finds the index of a key that is a command.
-         * @return Index of the key that is a command, if a command is found,
-         *         and -1 otherwise.
-         */
-        int __FindIndexWithCmdFlag()
-        {
-            for (int i = 0; i < arrkeys.size(); i++)
-            {
-                if (arrkeys[i].isCommand())
-                    return i;
-            }
-            return -1;
-        }
+        // /**
+        //  * @brief Finds the index of a key that is a command.
+        //  * @return Index of the key that is a command, if a command is found,
+        //  *         and -1 otherwise.
+        //  */
+        // int __FindIndexWithCmdFlag()
+        // {
+        //     for (int i = 0; i < arrkeys.size(); i++)
+        //     {
+        //         if (arrkeys[i].isCommand())
+        //             return i;
+        //     }
+        //     return -1;
+        // }
 
         /**
          * @brief Parses a prefixed parameter.
@@ -402,6 +408,10 @@ namespace VHArgsParser
 
                 // Mark executable command
                 arg.strval = "1";
+            }
+            else if (arg.isTypeOpt())
+            {
+                arg.intval = 1;
             }
 
             return vok;

@@ -30,7 +30,8 @@ namespace VHArgsParser
             : VHArgTypeBase(keyval, desc, false)
         {
             typearg = eOptType::eOptTypeOption;
-            if (def) {
+            intdef = def ? 1 : 0;
+            if(def)
                 defval = "1";
                 intdef = 1;
             } else {

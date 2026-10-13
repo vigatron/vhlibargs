@@ -37,7 +37,8 @@ public:
         : VHArgTypeBase(keyval, desc, true)
     {
         typearg = eOptType::eOptTypeInteger;
-        intval = def;
+        intdef = def;
+        intval = 0;
         intmin = min;
         intmax = max;
     }

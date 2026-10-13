@@ -41,6 +41,8 @@ namespace VHArgsParser
     constexpr std::string_view strTypeOpt = "Option";
     constexpr std::string_view strTypeUnk = "?";
 
+    constexpr std::string_view strForbiddenChars = "<>%*?:\0";
+
     class VHArgTypeBase
     {
     public:
@@ -81,7 +83,7 @@ namespace VHArgsParser
          */
         bool AssignDefault()
         {
-            if (isArgTypeText())
+            if (isTypeFileName() || isTypeString())
             {
                 strval = defval;
             }
@@ -101,14 +103,16 @@ namespace VHArgsParser
         bool Assign(const std::string &param)
         {
 
-            if (isArgTypeText())
+            if (isTypeFileName())
+            {
+                // Forbidden chars ? Error
+                if (param.find_first_of(strForbiddenChars) != std::string::npos)
+                    return false;
+                strval = param;
+            }
+            else if (isTypeString())
             {
                 strval = param;
-                // for (char c : strval)
-                // {
-                //     if (c == '/' || c == '\0')
-                //         return false;
-                // }
             }
             else
             {
@@ -132,23 +136,27 @@ namespace VHArgsParser
         }
 
         /**
+         *
+         */
+        bool isTypeFileName() const
+        {
+            return typearg == eOptType::eOptTypeFilename;
+        }
+
+        /**
          * @brief Checks if the argument is of text type.
          * @return True if the argument is of text type, false otherwise.
          */
-        bool isArgTypeText() const
+        bool isTypeString() const
         {
-
-            bool typetextf = typearg == eOptType::eOptTypeFilename;
-            bool typetexts = typearg == eOptType::eOptTypeString;
-
-            return typetextf || typetexts;
+            return typearg == eOptType::eOptTypeString;
         }
 
         /**
          * @brief Checks if the argument is of integer type.
          * @return True if the argument is of integer type, false otherwise.
          */
-        bool isArgTypeInt() const
+        bool isTypeInt() const
         {
             return typearg == eOptType::eOptTypeInteger;
         }
@@ -156,8 +164,8 @@ namespace VHArgsParser
         /**
          * @brief Checks if the argument is of bool type.
          * @return True if the argument is of bool type, false otherwise.
-         */        
-        bool isArgTypeOpt() const
+         */
+        bool isTypeOpt() const
         {
             return typearg == eOptType::eOptTypeOption;
         }
@@ -202,12 +210,12 @@ namespace VHArgsParser
 
             std::string r;
 
-            if (isArgTypeText())
+            if (isTypeFileName() || isTypeString())
             {
                 r += defval;
                 return r;
             }
-            else if (isArgTypeInt())
+            else if (isTypeInt())
             {
                 r += "val " + std::to_string(intval);
                 r += " [ min " + std::to_string(intmin);
@@ -215,7 +223,8 @@ namespace VHArgsParser
                 r += " ] def " + std::to_string(intdef);
                 return r;
             }
-            else if (isArgTypeOpt()) {
+            else if (isTypeOpt())
+            {
                 r += defval.size() ? "true" : "false";
                 return r;
             }
