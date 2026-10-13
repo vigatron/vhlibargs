@@ -1,13 +1,13 @@
 /* ======================================================================================
  * Library       : vhlibargs
  * Description   : A C++ command-line parser library
- * Revision      : 0.1.0-rc1
+ * Revision      : 0.1.0
  * Source        : https://github.com/vigatron/vhlibargs
  * Disclaimer    : Provided "AS IS", without warranty.
  * License       : MIT
  * File          : src/argsparser.hpp
  * Content size  : 14569
- * Date / Time   : 05-09-2026 19:27:40
+ * Date / Time   : 13-10-2026 17:18:21
  * MD5           : ce2b56b3a66458823a953db5b325e131
  * Notes         : MD5 = file content without header/footer
  * Encoding      : UTF-8
@@ -503,9 +503,9 @@ namespace VHArgsParser
 /* ========================[  END FILE CONTENT  ]========================
  * Library          : vhlibargs
  * File             : src/argsparser.hpp
- * Revision         : 0.1.0-rc1
+ * Revision         : 0.1.0
  * Content size     : 14569
- * Date / Time      : 05-09-2026 19:27:40
+ * Date / Time      : 13-10-2026 17:18:21
  * MD5              : ce2b56b3a66458823a953db5b325e131
  * Copyright        : © 2026 Viktor Glebov
  * ====================================================================== */
