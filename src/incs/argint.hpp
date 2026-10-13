@@ -7,7 +7,7 @@
  * License       : MIT
  * File          : src/incs/argint.hpp
  * Content size  : 470
- * Date / Time   : 13-10-2026 17:30:59
+ * Date / Time   : 13-10-2026 17:34:18
  * MD5           : ec0113e202e386c3f9848dd776b8b07c
  * Notes         : MD5 = file content without header/footer
  * Encoding      : UTF-8
@@ -50,7 +50,7 @@ public:
  * File             : src/incs/argint.hpp
  * Revision         : 0.1.0
  * Content size     : 470
- * Date / Time      : 13-10-2026 17:30:59
+ * Date / Time      : 13-10-2026 17:34:18
  * MD5              : ec0113e202e386c3f9848dd776b8b07c
  * Copyright        : © 2026 Viktor Glebov
  * ====================================================================== */

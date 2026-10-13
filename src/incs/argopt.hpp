@@ -6,9 +6,9 @@
  * Disclaimer    : Provided "AS IS", without warranty.
  * License       : MIT
  * File          : src/incs/argopt.hpp
- * Content size  : 570
- * Date / Time   : 13-10-2026 17:30:59
- * MD5           : b31e930a2d13a5436f466e880da911ff
+ * Content size  : 458
+ * Date / Time   : 13-10-2026 17:34:18
+ * MD5           : ad74b022c82b522998f0329cd5297a22
  * Notes         : MD5 = file content without header/footer
  * Encoding      : UTF-8
  * Author        : Viktor Glebov / V01G04A81
@@ -28,13 +28,7 @@ class VHArgTypeOption : public VHArgTypeBase {
         : VHArgTypeBase(keyval, desc, false) {
         typearg = eOptType::eOptTypeOption;
         intdef = def ? 1 : 0;
-        if (def) {
-            defval = "1";
-            intdef = 1;
-        } else {
-            defval = "";
-            intdef = 0;
-        }
+        defval = def ? "1" : "";
     }
 };
 };    // namespace VHArgsParser
@@ -43,8 +37,8 @@ class VHArgTypeOption : public VHArgTypeBase {
  * Library          : vhlibargs
  * File             : src/incs/argopt.hpp
  * Revision         : 0.1.0
- * Content size     : 570
- * Date / Time      : 13-10-2026 17:30:59
- * MD5              : b31e930a2d13a5436f466e880da911ff
+ * Content size     : 458
+ * Date / Time      : 13-10-2026 17:34:18
+ * MD5              : ad74b022c82b522998f0329cd5297a22
  * Copyright        : © 2026 Viktor Glebov
  * ====================================================================== */

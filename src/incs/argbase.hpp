@@ -7,7 +7,7 @@
  * License       : MIT
  * File          : src/incs/argbase.hpp
  * Content size  : 5782
- * Date / Time   : 13-10-2026 17:30:59
+ * Date / Time   : 13-10-2026 17:34:18
  * MD5           : 8161b883e36e3f3f8c5d4fbc080a02bb
  * Notes         : MD5 = file content without header/footer
  * Encoding      : UTF-8
@@ -239,7 +239,7 @@ namespace VHArgsParser
  * File             : src/incs/argbase.hpp
  * Revision         : 0.1.0
  * Content size     : 5782
- * Date / Time      : 13-10-2026 17:30:59
+ * Date / Time      : 13-10-2026 17:34:18
  * MD5              : 8161b883e36e3f3f8c5d4fbc080a02bb
  * Copyright        : © 2026 Viktor Glebov
  * ====================================================================== */
