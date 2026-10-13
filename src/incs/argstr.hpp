@@ -7,7 +7,7 @@
  * License       : MIT
  * File          : src/incs/argstr.hpp
  * Content size  : 393
- * Date / Time   : 13-10-2026 17:18:21
+ * Date / Time   : 13-10-2026 17:30:59
  * MD5           : 7b5e623a99c74a52a199fb8058afaa17
  * Notes         : MD5 = file content without header/footer
  * Encoding      : UTF-8
@@ -46,7 +46,7 @@ public:
  * File             : src/incs/argstr.hpp
  * Revision         : 0.1.0
  * Content size     : 393
- * Date / Time      : 13-10-2026 17:18:21
+ * Date / Time      : 13-10-2026 17:30:59
  * MD5              : 7b5e623a99c74a52a199fb8058afaa17
  * Copyright        : © 2026 Viktor Glebov
  * ====================================================================== */

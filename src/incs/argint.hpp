@@ -6,9 +6,9 @@
  * Disclaimer    : Provided "AS IS", without warranty.
  * License       : MIT
  * File          : src/incs/argint.hpp
- * Content size  : 450
- * Date / Time   : 13-10-2026 17:18:21
- * MD5           : 997220605463d446fba8db1a3d28bded
+ * Content size  : 470
+ * Date / Time   : 13-10-2026 17:30:59
+ * MD5           : ec0113e202e386c3f9848dd776b8b07c
  * Notes         : MD5 = file content without header/footer
  * Encoding      : UTF-8
  * Author        : Viktor Glebov / V01G04A81
@@ -49,8 +49,8 @@ public:
  * Library          : vhlibargs
  * File             : src/incs/argint.hpp
  * Revision         : 0.1.0
- * Content size     : 450
- * Date / Time      : 13-10-2026 17:18:21
- * MD5              : 997220605463d446fba8db1a3d28bded
+ * Content size     : 470
+ * Date / Time      : 13-10-2026 17:30:59
+ * MD5              : ec0113e202e386c3f9848dd776b8b07c
  * Copyright        : © 2026 Viktor Glebov
  * ====================================================================== */

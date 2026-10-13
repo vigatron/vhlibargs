@@ -6,9 +6,9 @@
  * Disclaimer    : Provided "AS IS", without warranty.
  * License       : MIT
  * File          : src/argsparser.hpp
- * Content size  : 14569
- * Date / Time   : 13-10-2026 17:18:21
- * MD5           : ce2b56b3a66458823a953db5b325e131
+ * Content size  : 14838
+ * Date / Time   : 13-10-2026 17:30:59
+ * MD5           : 98ccae5def94a66a7283ded9f25600bb
  * Notes         : MD5 = file content without header/footer
  * Encoding      : UTF-8
  * Author        : Viktor Glebov / V01G04A81
@@ -514,8 +514,8 @@ namespace VHArgsParser
  * Library          : vhlibargs
  * File             : src/argsparser.hpp
  * Revision         : 0.1.0
- * Content size     : 14569
- * Date / Time      : 13-10-2026 17:18:21
- * MD5              : ce2b56b3a66458823a953db5b325e131
+ * Content size     : 14838
+ * Date / Time      : 13-10-2026 17:30:59
+ * MD5              : 98ccae5def94a66a7283ded9f25600bb
  * Copyright        : © 2026 Viktor Glebov
  * ====================================================================== */
