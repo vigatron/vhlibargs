@@ -1,14 +1,14 @@
 /* ======================================================================================
  * Library       : vhlibargs
  * Description   : A C++ command-line parser library
- * Revision      : 0.1.0
+ * Revision      : 0.2.0
  * Source        : https://github.com/vigatron/vhlibargs
  * Disclaimer    : Provided "AS IS", without warranty.
  * License       : MIT
  * File          : src/argsparser.hpp
- * Content size  : 14838
- * Date / Time   : 13-10-2026 17:34:18
- * MD5           : 98ccae5def94a66a7283ded9f25600bb
+ * Content size  : 15083
+ * Date / Time   : 26-10-2026 22:43:15
+ * MD5           : 527efb484109c84e28546cfa370eba0a
  * Notes         : MD5 = file content without header/footer
  * Encoding      : UTF-8
  * Author        : Viktor Glebov / V01G04A81
@@ -22,6 +22,7 @@
 #include "incs/argcmd.hpp"
 #include "incs/argopt.hpp"
 #include "incs/argint.hpp"
+#include <iomanip>
 
 namespace VHArgsParser
 {
@@ -99,7 +100,9 @@ namespace VHArgsParser
         }
 
         /**
-         *
+         * @brief Returns the file path for a given key.
+         * @param keyname Name of the key to find.
+         * @return File path string if the key is found and is a file type key, and empty string otherwise.
          */
         const std::string &GetFileName(const std::string &keyname) const
         {
@@ -116,7 +119,9 @@ namespace VHArgsParser
         }
 
         /**
-         *
+         * @brief Returns the string value for a given key.
+         * @param keyname Name of the key to find.
+         * @return String value if the key is found and is a string type key, and empty string otherwise.
          */
         const std::string &GetString(const std::string &keyname) const
         {
@@ -133,7 +138,8 @@ namespace VHArgsParser
         }
 
         /**
-         *
+         * @brief Returns the name of the activated command.
+         * @return Command name if a command is found and activated, and empty string otherwise.
          */
         const std::string &GetCommand() const
         {
@@ -276,15 +282,18 @@ namespace VHArgsParser
          */
         void ShowUsage(const std::vector<VHArgTypeBase> &keyslist)
         {
-            std::cout << getappname() << " " << appdesc;
+            std::cout << std::endl;
+            std::cout << "`" << getappname() << "` " << appdesc << std::endl;
             std::cout << "USAGE : " << getappname() + " [... params ...]" << std::endl;
+            std::cout << std::endl;
             for (int i = 0; i < keyslist.size(); i++)
             {
                 std::cout
-                    << "\t" + keyslist[i].keyname
+                    << "\t" << std::setw(24) << keyslist[i].keyname
                     << "\t" << keyslist[i].keydesc
                     << std::endl;
             }
+            std::cout << std::endl;
         }
 
     private:
@@ -355,21 +364,6 @@ namespace VHArgsParser
 
             return true;
         }
-
-        // /**
-        //  * @brief Finds the index of a key that is a command.
-        //  * @return Index of the key that is a command, if a command is found,
-        //  *         and -1 otherwise.
-        //  */
-        // int __FindIndexWithCmdFlag()
-        // {
-        //     for (int i = 0; i < arrkeys.size(); i++)
-        //     {
-        //         if (arrkeys[i].isCommand())
-        //             return i;
-        //     }
-        //     return -1;
-        // }
 
         /**
          * @brief Parses a prefixed parameter.
@@ -513,9 +507,9 @@ namespace VHArgsParser
 /* ========================[  END FILE CONTENT  ]========================
  * Library          : vhlibargs
  * File             : src/argsparser.hpp
- * Revision         : 0.1.0
- * Content size     : 14838
- * Date / Time      : 13-10-2026 17:34:18
- * MD5              : 98ccae5def94a66a7283ded9f25600bb
+ * Revision         : 0.2.0
+ * Content size     : 15083
+ * Date / Time      : 26-10-2026 22:43:15
+ * MD5              : 527efb484109c84e28546cfa370eba0a
  * Copyright        : © 2026 Viktor Glebov
  * ====================================================================== */

@@ -1,14 +1,14 @@
 /* ======================================================================================
  * Library       : vhlibargs
  * Description   : A C++ command-line parser library
- * Revision      : 0.1.0
+ * Revision      : 0.2.0
  * Source        : https://github.com/vigatron/vhlibargs
  * Disclaimer    : Provided "AS IS", without warranty.
  * License       : MIT
  * File          : src/incs/argcmd.hpp
- * Content size  : 422
- * Date / Time   : 13-10-2026 17:34:18
- * MD5           : 0be26933a19fea51c59d127cdee7a848
+ * Content size  : 412
+ * Date / Time   : 26-10-2026 22:43:15
+ * MD5           : 95690a2b2e517029241af0fbb2c06988
  * Notes         : MD5 = file content without header/footer
  * Encoding      : UTF-8
  * Author        : Viktor Glebov / V01G04A81
@@ -23,10 +23,10 @@ namespace VHArgsParser
     /**
      * Only one command from enumerated keys can be passed to the app
      */
-    class VHArgTypeCommand : public VHArgTypeBase
+    class VHCLIArgCmd : public VHArgTypeBase
     {
     public:
-        VHArgTypeCommand(const std::string &keyval, const std::string &desc)
+        VHCLIArgCmd(const std::string &keyval, const std::string &desc)
             : VHArgTypeBase(keyval, desc, false)
         {
             typearg = eOptType::eOptTypeCommand;
@@ -37,9 +37,9 @@ namespace VHArgsParser
 /* ========================[  END FILE CONTENT  ]========================
  * Library          : vhlibargs
  * File             : src/incs/argcmd.hpp
- * Revision         : 0.1.0
- * Content size     : 422
- * Date / Time      : 13-10-2026 17:34:18
- * MD5              : 0be26933a19fea51c59d127cdee7a848
+ * Revision         : 0.2.0
+ * Content size     : 412
+ * Date / Time      : 26-10-2026 22:43:15
+ * MD5              : 95690a2b2e517029241af0fbb2c06988
  * Copyright        : © 2026 Viktor Glebov
  * ====================================================================== */
