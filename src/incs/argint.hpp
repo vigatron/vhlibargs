@@ -1,14 +1,14 @@
 /* ======================================================================================
  * Library       : vhlibargs
  * Description   : A C++ command-line parser library
- * Revision      : 0.1.0
+ * Revision      : 0.2.0
  * Source        : https://github.com/vigatron/vhlibargs
  * Disclaimer    : Provided "AS IS", without warranty.
  * License       : MIT
  * File          : src/incs/argint.hpp
- * Content size  : 470
- * Date / Time   : 13-10-2026 17:34:18
- * MD5           : ec0113e202e386c3f9848dd776b8b07c
+ * Content size  : 460
+ * Date / Time   : 26-10-2026 22:43:15
+ * MD5           : c235686476cd243e1eadc302cc632cb5
  * Notes         : MD5 = file content without header/footer
  * Encoding      : UTF-8
  * Author        : Viktor Glebov / V01G04A81
@@ -23,16 +23,16 @@ namespace VHArgsParser
 /**
  *
  */
-class VHArgTypeInteger : public VHArgTypeBase
+class VHCLIArgInt : public VHArgTypeBase
 {
 
 public:
-    VHArgTypeInteger(
+    VHCLIArgInt(
         const std::string &keyval,
-        const std::string &desc,
         int def,
         int min,
-        int max
+        int max,
+        const std::string &desc
     )
         : VHArgTypeBase(keyval, desc, true)
     {
@@ -48,9 +48,9 @@ public:
 /* ========================[  END FILE CONTENT  ]========================
  * Library          : vhlibargs
  * File             : src/incs/argint.hpp
- * Revision         : 0.1.0
- * Content size     : 470
- * Date / Time      : 13-10-2026 17:34:18
- * MD5              : ec0113e202e386c3f9848dd776b8b07c
+ * Revision         : 0.2.0
+ * Content size     : 460
+ * Date / Time      : 26-10-2026 22:43:15
+ * MD5              : c235686476cd243e1eadc302cc632cb5
  * Copyright        : © 2026 Viktor Glebov
  * ====================================================================== */

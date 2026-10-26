@@ -3,7 +3,7 @@
 > A lightweight, header-only C++ command-line arguments parser library.
 
 - **Author**: Viktor Glebov
-- **Version**: 0.1.1
+- **Version**: 0.2.0
 - **Language**: C++ (C++17 and later)
 - **License**: MIT
 
@@ -59,19 +59,19 @@ int main(int argc, char** argv) {
     std::vector<VHArgTypeBase> arrcmd;
 
     // Commands (mutually exclusive)
-    arrcmd.push_back(VHArgTypeCommand("-compress", "Run compression"));
-    arrcmd.push_back(VHArgTypeCommand("-extract", "Run extraction"));
+    arrcmd.push_back(VHCLIArgCmd("-compress", "Run compression"));
+    arrcmd.push_back(VHCLIArgCmd("-extract", "Run extraction"));
 
-    // Integers with min/max validation: (key, description, default, min, max)
-    arrcmd.push_back(VHArgTypeInteger("-B", "Pack block size", 1024, 1, 4096));
-    arrcmd.push_back(VHArgTypeInteger("-cd", "Color: 0 disabled, >=1 blocksize", 0, 0, 128));
+    // Integers with min/max validation: (key, default, min, max, description)
+    arrcmd.push_back(VHCLIArgInt("-B", 1024, 1, 4096, "Pack block size"));
+    arrcmd.push_back(VHCLIArgInt("-cd", 0, 0, 128, "Color: 0 disabled, >=1 blocksize"));
 
     // Strings and Files: (key, default_value, description)
-    arrcmd.push_back(VHArgTypeFileName("-srcfile", "", "Source file path"));
-    arrcmd.push_back(VHArgTypeString("-logfolder", ".", "Logs folder"));
+    arrcmd.push_back(VHCLIArgFile("-srcfile", "", "Source file path"));
+    arrcmd.push_back(VHCLIArgStr("-logfolder", ".", "Logs folder"));
 
-    // Boolean options: (key, description, default_state)
-    arrcmd.push_back(VHArgTypeOption("-cntr", "Container allowed / disabled", false));
+    // Boolean options: (key, default_bool, description)
+    arrcmd.push_back(VHCLIArgOpt("-cntr", false, "Container allowed / disabled"));
 
     // 3. Parse command line
     verr parse_status = cmdline.ParseCommandLine(arrcmd, argc, argv);
@@ -109,11 +109,11 @@ int main(int argc, char** argv) {
 
 | Class | Constructor Signature | Description |
 | :--- | :--- | :--- |
-| `VHArgTypeInteger` | `(key, desc, default, min, max)` | Validates integer input against `min` and `max` bounds. |
-| `VHArgTypeString` | `(key, default, desc)` | Standard string parameter. |
-| `VHArgTypeFileName` | `(key, default, desc)` | String parameter with forbidden characters validation. |
-| `VHArgTypeOption` | `(key, desc, default_bool)` | Boolean flag. Does not consume the next `argv` token. |
-| `VHArgTypeCommand` | `(key, desc)` | Mutually exclusive command trigger. Only one can be active. |
+| `VHCLIArgCmd` | `(key, desc)` | Mutually exclusive command trigger. Only one can be active. |
+| `VHCLIArgInt` | `(key, default, min, max, desc)` | Validates integer input against `min` and `max` bounds. |
+| `VHCLIArgStr` | `(key, default, desc)` | Standard string parameter. |
+| `VHCLIArgFile` | `(key, default, desc)` | String parameter with forbidden characters validation (`<>%*?:\0`). |
+| `VHCLIArgOpt` | `(key, default_bool, desc)` | Boolean flag. Does not consume the next `argv` token. |
 
 ### `VHCmdLineParser` Methods
 
