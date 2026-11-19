@@ -1,14 +1,14 @@
 /* ======================================================================================
  * Library       : vhlibargs
  * Description   : A C++ command-line parser library
- * Revision      : 0.2.0
+ * Revision      : 0.2.1
  * Source        : https://github.com/vigatron/vhlibargs
  * Disclaimer    : Provided "AS IS", without warranty.
  * License       : MIT
  * File          : src/incs/argbase.hpp
- * Content size  : 5782
- * Date / Time   : 26-10-2026 22:43:15
- * MD5           : 8161b883e36e3f3f8c5d4fbc080a02bb
+ * Content size  : 6411
+ * Date / Time   : 19-11-2026 09:29:04
+ * MD5           : 3ec75a064933046aefdfeac9bab3ec0c
  * Notes         : MD5 = file content without header/footer
  * Encoding      : UTF-8
  * Author        : Viktor Glebov / V01G04A81
@@ -20,6 +20,7 @@
 #include <iomanip>
 #include <sstream>
 #include <algorithm>
+#include <charconv>
 
 namespace VHArgsParser
 {
@@ -55,6 +56,11 @@ namespace VHArgsParser
             keydesc = desc;
             extra = extraparam;
             parsed = false;
+            typearg = eOptType::eOptTypeNoParam;
+            intmin = 0;
+            intmax = 0;
+            intdef = 0;
+            intval = 0;
         }
 
         eOptType typearg;
@@ -116,11 +122,19 @@ namespace VHArgsParser
             }
             else
             {
-                intval = std::stoi(param);
-
-                // Out of range ? Error
-                if (intval < intmin || intval > intmax)
+                // No exceptions: empty/garbage input or out-of-range number -> false
+                int parsedval{};
+                const char *begin = param.data();
+                const char *end = param.data() + param.size();
+                auto [ptr, err] = std::from_chars(begin, end, parsedval);
+                if (err != std::errc{} || ptr != end)
                     return false;
+
+                // Out of range ? Error (check before assigning!)
+                if (parsedval < intmin || parsedval > intmax)
+                    return false;
+
+                intval = parsedval;
             }
 
             return true;
@@ -197,6 +211,8 @@ namespace VHArgsParser
                 return strTypeInt.data();
             case eOptType::eOptTypeOption:
                 return strTypeOpt.data();
+            default:
+                break;
             }
             return strTypeUnk.data();
         }
@@ -237,9 +253,9 @@ namespace VHArgsParser
 /* ========================[  END FILE CONTENT  ]========================
  * Library          : vhlibargs
  * File             : src/incs/argbase.hpp
- * Revision         : 0.2.0
- * Content size     : 5782
- * Date / Time      : 26-10-2026 22:43:15
- * MD5              : 8161b883e36e3f3f8c5d4fbc080a02bb
+ * Revision         : 0.2.1
+ * Content size     : 6411
+ * Date / Time      : 19-11-2026 09:29:04
+ * MD5              : 3ec75a064933046aefdfeac9bab3ec0c
  * Copyright        : © 2026 Viktor Glebov
  * ====================================================================== */

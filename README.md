@@ -3,7 +3,7 @@
 > A lightweight, header-only C++ command-line arguments parser library.
 
 - **Author**: Viktor Glebov
-- **Version**: 0.2.0
+- **Version**: 0.2.1
 - **Language**: C++ (C++17 and later)
 - **License**: MIT
 
@@ -18,7 +18,7 @@
   - Filename forbidden characters detection.
   - Duplicate key prevention.
 - **Flexible Argument Types**: Supports integers, strings, filenames, boolean options, exclusive commands, and positional arguments.
-- **Minimal Dependencies**: Standalone by default, optionally integrates with `vhlibplatform` for unified error codes (`verr`, `vok`).
+- **Minimal Dependencies**: Works with `vhlibplatform` for unified error codes (`verr`, `vok`). When used standalone, the including translation unit must provide `<cstdint>`, `<vector>`, `<string>` and `<iostream>` plus a `verrmsg()` definition (see Quick Start).
 
 ---
 
@@ -44,7 +44,20 @@ Here is a comprehensive example demonstrating metadata setup, argument registrat
 ```cpp
 #include <iostream>
 #include <vector>
+#include <cstdint>   // standalone build: uint32_t for `verr`
+#include <string>    // standalone build: std::string
 #include "argsparser.hpp"
+
+// When building without vhlibplatform (VHPLATFORM_INCLUDED is not defined),
+// verrmsg() is only declared by the library, so you must define it yourself:
+#ifndef VHPLATFORM_INCLUDED
+namespace VHArgsParser {
+verr verrmsg(int x, const std::string &errmsg) {
+    std::cerr << "Error: " << errmsg << std::endl;
+    return verror(x);
+}
+}
+#endif
 
 using namespace VHArgsParser;
 
@@ -88,11 +101,12 @@ int main(int argc, char** argv) {
         int block_size = cmdline.GetInt("-B");
         std::string src = cmdline.GetFileName("-srcfile");
         bool use_container = cmdline.GetOpt("-cntr");
-        
-        std::cout << "Compressing: " << src 
-                  << " (Block: " << block_size 
+
+        std::cout << "Compressing: " << src
+                  << " (Block: " << block_size
                   << ", Container: " << (use_container ? "yes" : "no") << ")\n";
-    } else {
+    } else if (argc >= 2) {
+        // No valid command given (argc < 2 already printed usage inside the parser)
         cmdline.ShowUsage(arrcmd);
     }
 
@@ -123,13 +137,15 @@ int main(int argc, char** argv) {
 | `setAppDesc(str)` | `void` | Sets the application description for usage output. |
 | `ParseCommandLine(keys, argc, argv)` | `verr` | Parses arguments. Returns `vok` (0) on success, error code otherwise. |
 | `GetInt(key)` | `int` | Retrieves integer value. Returns `0` if not found or wrong type. |
-| `GetString(key)` | `std::string` | Retrieves string value. Returns empty string if not found. |
-| `GetFileName(key)` | `std::string` | Retrieves validated file path. Returns empty string if not found. |
+| `GetString(key)` | `const std::string&` | Retrieves string value. Returns empty string if not found. |
+| `GetFileName(key)` | `const std::string&` | Retrieves validated file path. Returns empty string if not found. |
 | `GetOpt(key)` | `bool` | Retrieves boolean state of an option flag. |
-| `GetCommand()` | `std::string` | Returns the name of the activated command (e.g., `"-compress"`). |
+| `GetCommand()` | `const std::string&` | Returns the name of the activated command (e.g., `"-compress"`). |
 | `singles()` | `const std::vector<std::string>&` | Returns a list of positional (non-prefixed) arguments. |
 | `listparams()` | `std::vector<std::string>` | Returns a formatted list of all parsed parameters for debugging. |
 | `ShowUsage(keys)` | `void` | Prints formatted help text to `stdout`. |
+
+*Note: getters returning `const std::string&` refer to internal storage (or a shared empty string). The reference stays valid only as long as the parser object lives and is not modified — copy the string if you need it longer.*
 
 ---
 
@@ -151,6 +167,8 @@ The library uses a lightweight error code system:
 - `vok`: Success (value `0`).
 - `verr`: Unsigned 32-bit integer representing an error code.
 - `verrmsg(code, message)`: Helper function to log and return an error.
+
+`ParseCommandLine` is `noexcept`: any unexpected internal error (e.g. memory allocation failure) is caught at the API boundary and converted to a `verr` error code via `verrmsg(1, ...)` — the library never throws through its public interface.
 
 If `argc < 2`, the parser automatically invokes `ShowUsage()` and returns `vok` (intended behavior for triggering help when no args are provided).
 
