@@ -1,14 +1,14 @@
 /* ======================================================================================
  * Library       : vhlibargs
  * Description   : A C++ command-line parser library
- * Revision      : 0.2.0
+ * Revision      : 0.2.1
  * Source        : https://github.com/vigatron/vhlibargs
  * Disclaimer    : Provided "AS IS", without warranty.
  * License       : MIT
  * File          : src/argsparser.hpp
- * Content size  : 15083
- * Date / Time   : 26-10-2026 22:43:15
- * MD5           : 527efb484109c84e28546cfa370eba0a
+ * Content size  : 16672
+ * Date / Time   : 19-11-2026 09:29:04
+ * MD5           : 98b56a220b844df108908d2cbca4385c
  * Notes         : MD5 = file content without header/footer
  * Encoding      : UTF-8
  * Author        : Viktor Glebov / V01G04A81
@@ -48,6 +48,8 @@ namespace VHArgsParser
 
         /**
          * @brief Parses the command line and returns the result.
+         * @note Never throws: any unexpected exception is caught at this API boundary
+         *       and converted to a `verr` error code.
          * @param keyslist List of keys to parse.
          * @param argc Number of command line arguments.
          * @param argv Array of command line arguments.
@@ -55,48 +57,20 @@ namespace VHArgsParser
          */
         verr ParseCommandLine(
             const std::vector<VHArgTypeBase> &keyslist,
-            int argc, char *argv[])
+            int argc, char *argv[]) noexcept
         {
-            // No params avail ?
-            if (argc < 2)
+            try
             {
-                ShowUsage(keyslist);
-                return 0;
+                return ParseCommandLineImpl(keyslist, argc, argv);
             }
-
-            // Step #1: Preprocess given keys list
-            for (const VHArgTypeBase &key : keyslist)
+            catch (const std::exception &e)
             {
-                verr status = add(key);
-                if (status != vok)
-                    return verrmsg(1, "Can't add key: " + key.keyname);
+                return verrmsg(1, std::string("Unexpected error: ") + e.what());
             }
-
-            // Step #2: Assign default values to unlisted
-            for (size_t idx = 0; idx < arrkeys.size(); idx++)
+            catch (...)
             {
-                if (!arrkeys[idx].AssignDefault())
-                    return verrmsg(1, "Can't set default value: " + arrkeys[idx].keyname);
+                return verrmsg(1, std::string("Unexpected error (unknown exception)"));
             }
-
-            // Step #3: Process argv[] / command line
-            for (int i = 1; i < argc; i++)
-            {
-                char *strarg = argv[i];
-                std::string txtargv = std::string(strarg);
-
-                verr status = ProcessArgument(txtargv);
-                if (status != vok)
-                    return verrmsg(1, "Error processing argv '" + txtargv + "'");
-            }
-
-            // All keys passs or incompleted param left ?
-            if (extFollowed)
-            {
-                return verrmsg(1, std::string("key passed without param"));
-            }
-
-            return vok;
         }
 
         /**
@@ -201,7 +175,7 @@ namespace VHArgsParser
             std::vector<std::string> arr;
 
             // opts first
-            for (int i = 0; i < arrkeys.size(); i++)
+            for (size_t i = 0; i < arrkeys.size(); i++)
             {
                 std::string info;
                 std::stringstream ss;
@@ -216,7 +190,7 @@ namespace VHArgsParser
             }
 
             // args next
-            for (int i = 0; i < arrsingle.size(); i++)
+            for (size_t i = 0; i < arrsingle.size(); i++)
             {
                 arr.push_back(arrsingle[i]);
             }
@@ -237,9 +211,16 @@ namespace VHArgsParser
          * @brief Returns the VHArgTypeBase object by its index.
          * @param idx Index of the key.
          * @return VHArgTypeBase object at the specified index.
+         *         Out-of-range indices return a reference to a static dummy object
+         *         instead of undefined behavior.
          */
         const VHArgTypeBase &GetKeyByIndex(size_t idx) const
         {
+            if (idx >= arrkeys.size())
+            {
+                static const VHArgTypeBase dummy("", "", false);
+                return dummy;
+            }
             return arrkeys[idx];
         }
 
@@ -286,7 +267,7 @@ namespace VHArgsParser
             std::cout << "`" << getappname() << "` " << appdesc << std::endl;
             std::cout << "USAGE : " << getappname() + " [... params ...]" << std::endl;
             std::cout << std::endl;
-            for (int i = 0; i < keyslist.size(); i++)
+            for (size_t i = 0; i < keyslist.size(); i++)
             {
                 std::cout
                     << "\t" << std::setw(24) << keyslist[i].keyname
@@ -307,6 +288,64 @@ namespace VHArgsParser
         size_t idxExtFollow;                // Index of the next argument
 
         std::string strEmptyString;
+
+        /**
+         * @brief Implementation of the command line parsing.
+         * @note May throw due to allocation failures; the public noexcept
+         *       ParseCommandLine() catches and converts them to `verr` codes.
+         * @param keyslist List of keys to parse.
+         * @param argc Number of command line arguments.
+         * @param argv Array of command line arguments.
+         * @return Result of command line parsing.
+         */
+        verr ParseCommandLineImpl(
+            const std::vector<VHArgTypeBase> &keyslist,
+            int argc, char *argv[])
+        {
+            // No params avail ?
+            if (argc < 2)
+            {
+                ShowUsage(keyslist);
+                return 0;
+            }
+
+            // Step #1: Preprocess given keys list
+            for (const VHArgTypeBase &key : keyslist)
+            {
+                verr status = add(key);
+                if (status != vok)
+                    return verrmsg(1, "Can't add key: " + key.keyname);
+            }
+
+            // Step #2: Assign default values to unlisted
+            for (size_t idx = 0; idx < arrkeys.size(); idx++)
+            {
+                if (!arrkeys[idx].AssignDefault())
+                    return verrmsg(1, "Can't set default value: " + arrkeys[idx].keyname);
+            }
+
+            // Step #3: Process argv[] / command line
+            for (int i = 1; i < argc; i++)
+            {
+                char *strarg = argv[i];
+                if (!strarg)
+                    return verrmsg(1, "argv contains nullptr at index " + std::to_string(i));
+
+                std::string txtargv = std::string(strarg);
+
+                verr status = ProcessArgument(txtargv);
+                if (status != vok)
+                    return verrmsg(1, "Error processing argv '" + txtargv + "'");
+            }
+
+            // All keys passs or incompleted param left ?
+            if (extFollowed)
+            {
+                return verrmsg(1, std::string("key passed without param"));
+            }
+
+            return vok;
+        }
 
         /**
          * @brief Finds the index of a key by its name.
@@ -493,7 +532,7 @@ namespace VHArgsParser
          */
         int InternalFindIndexActivatedCmd() const
         {
-            for (int i = 0; i < arrkeys.size(); i++)
+            for (size_t i = 0; i < arrkeys.size(); i++)
             {
                 if (arrkeys[i].isCommand())
                     if (arrkeys[i].strval.size())
@@ -507,9 +546,9 @@ namespace VHArgsParser
 /* ========================[  END FILE CONTENT  ]========================
  * Library          : vhlibargs
  * File             : src/argsparser.hpp
- * Revision         : 0.2.0
- * Content size     : 15083
- * Date / Time      : 26-10-2026 22:43:15
- * MD5              : 527efb484109c84e28546cfa370eba0a
+ * Revision         : 0.2.1
+ * Content size     : 16672
+ * Date / Time      : 19-11-2026 09:29:04
+ * MD5              : 98b56a220b844df108908d2cbca4385c
  * Copyright        : © 2026 Viktor Glebov
  * ====================================================================== */
